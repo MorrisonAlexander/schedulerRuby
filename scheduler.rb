@@ -6,7 +6,6 @@ def team_availability(appointments)
   appointments.push(lunch)
 #express appointments as intervals over time line
   appointments = encodeAppointments(appointments)
-  #puts appointments
   startOfDay, endOfDay = encode("8:30"), encode("5:00")
 #express availability as intervals over time segment
   availability = encodeAvailability(appointments, startOfDay, endOfDay)
