@@ -1,31 +1,27 @@
-def encode(time)
-    #example does not provide am pm.
-    #am pm implicit possible due to no overlap of pm am work day hours
-    hours, minutes = time.split(":")
-    halfHours, minutes = 2 * hours.to_f, minutes.to_f
-    halfHours += (minutes / 30).to_i
-    minutes -= (minutes / 30).to_i * 30
-    #convert to military time
-    if hours.to_i < 8 #if pm as inferred by context
-        halfHours += 2 * 12
-    end
-    #reduce dimensions of unit
-    #possible because time forms a line with minutes and smaller frames of time expressed in decimal range
-    halfHours += 100**-1 * minutes
-    return halfHours
+require_relative("unitType")
+require_relative("appointments")
+
+def team_availability(appointments)
+  lunch = ["12:00", "1:00"]
+  appointments.push(lunch)
+#express appointments as intervals over time line
+  appointments = encodeAppointments(appointments)
+  #puts appointments
+  startOfDay, endOfDay = encode("8:30"), encode("5:00")
+#express availability as intervals over time segment
+  availability = encodeAvailability(appointments, startOfDay, endOfDay)
+#chop availablity into 30 minute openings
+  openings = encodeOpenings(availability)
+#Decode openings to string time
+  decodeOpenings(openings)
+  return openings
 end
 
-def decode(time)
-    #timeInTermsOfAppointments -> stringTime
-    minutes = (((time % 2).to_i * 30 + 100 * (time % time.to_i)).to_i).to_s
-    hours = ((time / 2).to_i - 12 * (time / 24).to_i).to_s
-    if hours == "0"
-        hours = "12"
-    end
+appointments = [['9:00', '9:30'], ['9:00', '11:30'], ['10:00', '11:00'], ['2:30', '3:00'], ['2:30', '3:30']]
+print(team_availability(appointments))
 
-    while minutes.length < 2
-        minutes += "0"
-    end
-    return hours + ":" + minutes
-end
+# Unit test decode must == encode for range encode(start stop work day)
+#team_availability([['9:00', '9:30'], ['9:00', '11:30'], ['10:00', '11:00'], ['2:30', '3:00'], ['2:30', '3:30']])
+#[['8:30', '9:00'], ['11:30', '12:00'], ['1:00', '1:30'], ['1:30', '2:00'], ['2:00', '2:30'], ['3:30', '4:00'], ['4:00', '4:30'], ['4:30', '5:00']]
+#8:30-5:00, with lunch from 12:00-1:00, we have 8 engineers on our team with appointments at 9:00-9:30, 9:00-11:30, 10:00-11:00, 2:30-3:00, 2:30-3:30
 
