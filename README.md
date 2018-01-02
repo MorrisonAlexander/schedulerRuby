@@ -1,5 +1,5 @@
 # schedulerRuby
-## A demonstration of using mathematical schema to describe time in terms of a given event
+*A demonstration of using mathematical schema to describe time in terms of a given event*
 
 Entry point in -> appointments.rb -> team_availability(appointments) 
 Vocabulary Key: open- no appointment, closed-appointment
