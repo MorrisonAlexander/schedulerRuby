@@ -2,7 +2,6 @@ require 'rubygems'
 gem 'minitest'
 require 'minitest/autorun'
 require_relative 'unitType'
-#!!built in test frameworks unit-test and minitest appear to be faulty: Reroute testing to test.rb
 class TestUnitType < Minitest::Test
   def setup
     #times[] and timesEncoded[] are symmetric -> 24*60 = 48*30
@@ -37,5 +36,17 @@ class TestUnitType < Minitest::Test
     for time in 0..(@times.length - 1)
       assert_equal @times[time], decode(@timesEncoded[time]), @times[time].to_s + " and " + decode(@timesEncoded[time]).to_s + " - " + @timesEncoded[time].to_s + "\n"
     end
+  end
+
+  def test_Subtraction
+    #There are !600 possible subtractions, too much for a brute test algorithm
+    for time in @timesEncoded
+      time = Unit.new time
+      assert_equal 0, time-time
+    end
+    #case study intended to maximize chance of failure
+    timeA = Unit.new "9:16"
+    timeB = Unit.new "4:37"
+    assert_equal timeB - timeA, 14.21 #33.7 - 18.16
   end
 end

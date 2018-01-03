@@ -39,10 +39,10 @@ class Unit
   def initialize(time)
     if time.instance_of? String
       @halfHours = encode(time)
-    elsif time.instance_of? Float
-      self.halfHours = time
+    elsif time.instance_of? Rational or time.instance_of? Float
+      @halfHours = time
     else
-      raise Exception("Enexpected Logic")
+      raise
     end
   end
 
