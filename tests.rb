@@ -12,7 +12,7 @@ class Tests
       end
     end
     @times = []
-    for hour in (8..12).to_a.push(1..5)
+    for hour in ((8..12).to_a + (1..5).to_a)
       for minute in 0..59
         if minute < 10
           minute = "0" + minute.to_s
@@ -22,11 +22,12 @@ class Tests
       end
     end
   end
+
   def test_encode
     #test encode of every possible permutation of time within 24 hour block
     failures = []
     good = []
-    for time in 0..(@times.length-1)
+    for time in 0..(@times.length - 1)
       #assert_equal(@timesEncoded[time], encode(@times[time]))
       if @timesEncoded[time] != encode(@times[time])
         failures.push([@timesEncoded[time], encode(@times[time])])
@@ -37,17 +38,25 @@ class Tests
     print good
     for failure in failures
       puts failure
-    end end
+    end
+  end
+
   def test_decode
     #test decode of every possible permutation of time within 24 hour block
-    for time in 0..(@times.length-1)
+    print "dd"
+    for time in 0..(@times.length - 1)
       if @times[time] != decode(@timesEncoded[time])
-        raise "decode test failure"
+        print @times[time], " and ", decode(@timesEncoded[time]), "\n"
+
       end
-      i = 3
+
     end
   end
 
 end
-tests = Tests.new
-test.test
+def runTest
+  tests = Tests.new
+  tests.test_encode
+  tests.test_decode
+end
+runTest
