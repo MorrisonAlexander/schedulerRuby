@@ -24,7 +24,7 @@ def decode(time)
   end
 
   while minutes.length < 2
-    minutes += "0"
+    minutes = "0" + minutes
   end
   return hours + ":" + minutes
 end
